@@ -12,6 +12,9 @@ function recordTime() {
 		beginTime = 3600*today.getHours()+60*today.getMinutes()+today.getSeconds();
 		doingQuestion = true;
 	}
+	if (question == 11) {
+		alert("There are no more problems left in the EHR Form!");
+	}
 	else {
 		alert("You need to submit your answer to question " + question + " first!");
 	}
@@ -33,6 +36,9 @@ function recordTime2() {
 		doingQuestion = false;
 		totalTime += timeTaken;
 		
+	}
+	else if (question == 11) {
+		alert("There are no more problems left in the EHR Form!");
 	}
 	else {
 		alert("You need to start the timer for question " + question + " first!");
