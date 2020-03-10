@@ -12,7 +12,7 @@ function recordTime() {
 		beginTime = 3600*today.getHours()+60*today.getMinutes()+today.getSeconds();
 		doingQuestion = true;
 	}
-	if (question == 11) {
+	else if (question == 11) {
 		alert("There are no more problems left in the EHR Form!");
 	}
 	else {
