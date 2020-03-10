@@ -7,43 +7,42 @@ var totalTime = 0;
 
 
 function recordTime() {
-	if (!doingQuestion) {
-		if (question == 11) {
-			alert("There are no more problems left in the EHR Form!");
+	if (question < 11) {
+		if (!doingQuestion) {
+			else {
+				var today = new Date();
+				beginTime = 3600*today.getHours()+60*today.getMinutes()+today.getSeconds();
+				doingQuestion = true;
+			}
 		}
 		else {
-			var today = new Date();
-			beginTime = 3600*today.getHours()+60*today.getMinutes()+today.getSeconds();
-			doingQuestion = true;
+			alert("You need to submit your answer to question " + question + " first!");
 		}
-	}
-	else {
-		alert("You need to submit your answer to question " + question + " first!");
 	}
 }
 
 function recordTime2() {
-	// end clock
-	if (doingQuestion) {
-		var end = new Date();
-		endTime = 3600*end.getHours()+60*end.getMinutes()+end.getSeconds();
-		var timeTaken = endTime - beginTime;
-	
-		// update chart
-		var id = "q"+question;
-		document.getElementById(id).innerHTML = "Q"+question+": " + timeTaken + " seconds.";
-	
-		// jump to next question.
-		question++;
-		doingQuestion = false;
-		totalTime += timeTaken;
+	if (question < 11) {
+		// end clock
+		if (doingQuestion) {
+			var end = new Date();
+			endTime = 3600*end.getHours()+60*end.getMinutes()+end.getSeconds();
+			var timeTaken = endTime - beginTime;
+
+			// update chart
+			var id = "q"+question;
+			document.getElementById(id).innerHTML = "Q"+question+": " + timeTaken + " seconds.";
+
+			// jump to next question.
+			question++;
+			doingQuestion = false;
+			totalTime += timeTaken;
+
+		}
+		else {
+			alert("You need to start the timer for question " + question + " first!");
+		}
 		
-	}
-	else if (question == 11) {
-		alert("There are no more problems left in the EHR Form!");
-	}
-	else {
-		alert("You need to start the timer for question " + question + " first!");
 	}
 	
 	
