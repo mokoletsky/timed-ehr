@@ -8,12 +8,14 @@ var totalTime = 0;
 
 function recordTime() {
 	if (!doingQuestion) {
-		var today = new Date();
-		beginTime = 3600*today.getHours()+60*today.getMinutes()+today.getSeconds();
-		doingQuestion = true;
-	}
-	else if (question == 11) {
-		alert("There are no more problems left in the EHR Form!");
+		if (question == 11) {
+			alert("There are no more problems left in the EHR Form!");
+		}
+		else {
+			var today = new Date();
+			beginTime = 3600*today.getHours()+60*today.getMinutes()+today.getSeconds();
+			doingQuestion = true;
+		}
 	}
 	else {
 		alert("You need to submit your answer to question " + question + " first!");
@@ -50,7 +52,7 @@ function recordTime2() {
 function e1emTimer() {
 	var today = new Date();
 	if (!doingQuestion && question == 1) {
-    	document.getElementById('header').innerHTML = "Welcome to the Timed EHR Form! Here are 10 questions that you will have to answer regarding a patient. To begin, press the 'Start Timer' button. Once you are finished, press the 'End Timer' button."
+    	document.getElementById('header').innerHTML = "Welcome to the (new) Timed EHR Form! Here are 10 questions that you will have to answer regarding a patient. To begin, press the 'Start Timer' button. Once you are finished, press the 'End Timer' button."
     	document.getElementById('header2').innerHTML = "You have yet to begin. You will attempt Question 1.";
     }
     else if (doingQuestion) {
