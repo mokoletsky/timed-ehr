@@ -48,7 +48,7 @@ function recordTime2() {
 	
 }
 
-function e1emTimer() {
+function header() {
 	var today = new Date();
 	if (!doingQuestion && question == 1) {
     	document.getElementById('header').innerHTML = "Welcome to the (new) Timed EHR Form! Here are 10 questions that you will have to answer regarding a patient. To begin, press the 'Start Timer' button. Once you are finished, press the 'End Timer' button."
@@ -75,5 +75,5 @@ function e1emTimer() {
     }
     
 }
-var countdownTimer = setInterval('e1emTimer()', 10);
-window.onload = e1emTimer;
+var countdownTimer = setInterval('header()', 10);
+window.onload = header;
