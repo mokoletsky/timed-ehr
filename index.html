@@ -1,3 +1,130 @@
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js"></script>
+
+<script>
+	
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyC6SePD61X09Mf5i5To0Lkr8gPnoALqrlc",
+    authDomain: "timed-ehr-questions.firebaseapp.com",
+    databaseURL: "https://timed-ehr-questions.firebaseio.com",
+    projectId: "timed-ehr-questions",
+    storageBucket: "timed-ehr-questions.appspot.com",
+    messagingSenderId: "1048652677263",
+    appId: "1:1048652677263:web:a80e0845979d02394ab0fa",
+    measurementId: "G-M0GVHLCVQW"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  
+  
+  var db = firebase.firestore();
+  //var patient = document.getElementById('pname').value;
+
+var beginTime = 0;
+var endTime = 0;
+var doingQuestion = false;
+var question = 1;
+var totalTime = 0;
+var solutions = ["","","","","","","","","",""];
+var times = ["","","","","","","","","",""];
+
+
+
+function recordTime() {
+	if (!doingQuestion) {
+		if (question == 11) {
+			alert("There are no more problems left in the EHR Form!");
+		}
+		else {
+			var today = new Date();
+			beginTime = 3600*today.getHours()+60*today.getMinutes()+today.getSeconds();
+			doingQuestion = true;
+		}
+	}
+	else {
+		alert("You need to submit your answer to question " + question + " first!");
+	}
+}
+
+function recordTime2() {
+	// end clock
+	if (doingQuestion) {
+		var end = new Date();
+		endTime = 3600*end.getHours()+60*end.getMinutes()+end.getSeconds();
+		var timeTaken = endTime - beginTime;
+	
+		// update chart
+		var id = "q"+question;
+		document.getElementById(id).innerHTML = "Q"+question+": " + timeTaken + " seconds.";
+		times[question-1] = timeTaken;
+		
+		var id = "a"+question;
+		solutions[question-1] = document.getElementById(id).value;
+	
+		// jump to next question.
+		question++;
+		doingQuestion = false;
+		totalTime += timeTaken;
+		
+		if (question == 11) { // all answers are logged.
+			db.collection("submissions").add({
+    		patient: document.getElementById('pname').value,
+    		physician: document.getElementById('dname').value,
+    		FIELDS_answers: solutions,
+    		FIELDS_times: times})
+		}
+		
+	}
+	else if (question == 11) {
+		alert("There are no more problems left in the EHR Form!");
+	}
+	else {
+		alert("You need to start the timer for question " + question + " first!");
+	}
+	
+	
+}
+
+function header() {
+	var today = new Date();
+	if (!doingQuestion && question == 1) {
+    	document.getElementById('header').innerHTML = "Welcome to the Timed EHR Form! Here are 10 questions that you will have to answer regarding a patient. To begin, press the 'Start Timer' button. Once you are finished, press the 'End Timer' button. All your submissions will be recorded online."
+    	document.getElementById('header2').innerHTML = "You have yet to begin. You will attempt Question 1.";
+    }
+    else if (doingQuestion) {
+    	var current = new Date();
+		currentTime = 3600*current.getHours()+60*current.getMinutes()+current.getSeconds();
+		var timeElapsed = currentTime - beginTime;
+		document.getElementById('header2').innerHTML = "You are on Question " + question + ".";
+		document.getElementById('header').innerHTML = "";
+		document.getElementById('timer').innerHTML = "TIME ELAPSED: " + timeElapsed + " seconds.";
+    }
+    else if (!doingQuestion && question <= 10) {
+    	var finished = question - 1;
+    	document.getElementById('header').innerHTML = "Question " + finished + " completed.";
+    	document.getElementById('header2').innerHTML = "You may now attempt Question " + question + ".";
+    	document.getElementById('timer').innerHTML = "";
+    }
+    else {
+    	document.getElementById('header').innerHTML = "Thank you for participating!";
+    	document.getElementById('header2').innerHTML = "The total time taken was: " + totalTime + " seconds.";
+    	document.getElementById('timer').innerHTML = "See you soon!";
+    }
+    
+}
+var countdownTimer = setInterval('header()', 10);
+window.onload = header;
+  
+</script>
+
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" type="text/css" href="bstrp.css">
 <head>
